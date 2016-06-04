@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+                            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+                            http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+
+	<!-- DataSource Definition -->
+	<!-- <jee:jndi-lookup id="dataSource" jndi-name="jboss/datasources/IEPDS" -->
+	<!-- expected-type="javax.sql.DataSource" /> -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.h2.Driver" />
+		<property name="url" value="jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1" />
+		<property name="username" value="sa" />
+		<property name="password" value="" />
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+		destroy-method="destroy">
+		<property name="dataSource" ref="dataSource" />
+		<!-- Java物件與資料庫表格的映射檔 -->
+		<property name="mappingLocations">
+			<value>classpath*:hibernateMapping/*.hbm.xml</value>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.hbm2ddl.auto">create</prop>
+				<!-- SQL方言 -->
+				<prop key="hibernate.dialect">>org.hibernate.dialect.HSQLDialect</prop>
+				<!-- 是否要顯示實際操作資料庫時的SQL --><!-- 由logback輸出 -->
+				<prop key="hibernate.show_sql">false</prop>
+				<!-- 是否要格式化操作資料庫時的SQL -->
+				<prop key="hibernate.format_sql">true</prop>
+				<!-- 是否顯示注釋 -->
+				<prop key="hibernate.use_sql_comments">false</prop>
+				<prop key="hibernate.connection.zeroDateTimeBehavior">convertToNull</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- DAO由annotation方式標註讓spring注入hibernateTemplate -->
+	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate4.HibernateTemplate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<!-- transaction manager -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="insert*" propagation="REQUIRED" isolation="READ_COMMITTED" />
+			<tx:method name="add*" propagation="REQUIRED" isolation="READ_COMMITTED" />
+			<tx:method name="update*" propagation="REQUIRED" isolation="READ_COMMITTED" />
+			<tx:method name="delete*" propagation="REQUIRED" isolation="READ_COMMITTED" />
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="get*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:pointcut id="daoPointcut"
+			expression="execution(* com.*.service.*Service.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="daoPointcut" />
+	</aop:config>
+
+</beans>
