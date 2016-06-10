@@ -4,11 +4,11 @@
  */
 package com.ayuayu.dao.statement;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ayuayu.model.statement.BalanceSheetIfrs;
 import com.ayuayu.model.statement.BalanceSheetIfrsKey;
 
 public interface BalanceSheetIfrsRepository extends
-		CrudRepository<BalanceSheetIfrs, BalanceSheetIfrsKey> {
+		JpaRepository<BalanceSheetIfrs, BalanceSheetIfrsKey> {
 }

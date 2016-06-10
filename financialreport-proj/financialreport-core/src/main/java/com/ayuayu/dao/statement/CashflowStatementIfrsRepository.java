@@ -4,11 +4,11 @@
  */
 package com.ayuayu.dao.statement;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ayuayu.model.statement.CashFlowStatementIfrs;
 import com.ayuayu.model.statement.CashFlowStatementIfrsKey;
 
 public interface CashflowStatementIfrsRepository extends
-		CrudRepository<CashFlowStatementIfrs, CashFlowStatementIfrsKey> {
+		JpaRepository<CashFlowStatementIfrs, CashFlowStatementIfrsKey> {
 }

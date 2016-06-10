@@ -21,7 +21,7 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(name = "CAPITAL_STRUCTURE_ANALYSIS_IFRS", schema = "PUBLIC", catalog = "STOCKDB")
+@Table(name = "CAPITAL_STRUCTURE_ANALYSIS_IFRS")
 // Define named queries here
 @NamedQueries({ @NamedQuery(name = "CapitalStructureAnalysisIfrs.countAll", query = "SELECT COUNT(x) FROM CapitalStructureAnalysisIfrs x") })
 public class CapitalStructureAnalysisIfrs implements Serializable {

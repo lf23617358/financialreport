@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -20,8 +21,6 @@ import com.ayuayu.bean.DayOfReport;
 import com.ayuayu.bean.Report;
 import com.ayuayu.constants.Institution;
 import com.ayuayu.constants.ReportType;
-import com.iisigroup.aamgr.constants.Base64Mode;
-import com.iisigroup.aamgr.handler.impl.Base64Handler;
 
 @SuppressWarnings("unchecked")
 public class ReportUtil {
@@ -98,8 +97,8 @@ public class ReportUtil {
 				line = StringUtils.substringBetween(line,
 						"<input type=hidden id='html' name='html' value=\"",
 						"\">");
-				Base64Handler handler = new Base64Handler(Base64Mode.DECODE);
-				byte[] result = handler.handle(line.getBytes());
+				// Base64Handler handler = new Base64Handler(Base64Mode.DECODE);
+				byte[] result = Base64.decodeBase64(line);
 				line = new String(result);
 				String[] trs = StringUtils.substringsBetween(line,
 						"<tr bgcolor=#FFFFFF>", "</tr>");
@@ -132,84 +131,87 @@ public class ReportUtil {
 		return report;
 	}
 
-//	public static DayOfReport compute(String stockId, int year, int season,
-//			ReportType reportType, DayOfReport... reports) {
-//		DayOfReport report = new DayOfReport();
-//		report.setYear(year);
-//		report.setSeason(season);
-//		report.setStockId(stockId);
-//		report.setReportType(reportType);
-//		switch (reportType) {
-//		case LIQUIDITY_ANALYSIS:
-//			LiquidityAnalysisService liquidityAnalysisService = new LiquidityAnalysisServiceImpl();
-//			liquidityAnalysisService.init(year, season, reports);
-//			report.addData("流動比",
-//					liquidityAnalysisService.computeCurrentRatio());
-//			report.addData("速動比", liquidityAnalysisService.computeQuickRatio());
-//			report.addData("利息保障倍數",
-//					liquidityAnalysisService.computeInterestGuarantee());
-//			break;
-//		case RETRUN_ON_INVESTMENT_ANALYSIS:
-//			RetrunOnInvestmentAnalysisService retrunOnInvestmentAnalysisService = new RetrunOnInvestmentAnalysisServiceImpl();
-//			retrunOnInvestmentAnalysisService.init(year, season, reports);
-//			report.addData("毛利率", retrunOnInvestmentAnalysisService
-//					.computeGrossProfitMargin());
-//			report.addData("營業利益率", retrunOnInvestmentAnalysisService
-//					.computeOperatingProfitMargin());
-//			report.addData("稅前淨利率", retrunOnInvestmentAnalysisService
-//					.computePreTaxNetProfitMargin());
-//			report.addData("稅後淨利率",
-//					retrunOnInvestmentAnalysisService.computeNetProfitMargin());
-//			report.addData("股東權益報酬率",
-//					retrunOnInvestmentAnalysisService.computeROE());
-//			report.addData("資產報酬率",
-//					retrunOnInvestmentAnalysisService.computeROA());
-//			break;
-//		case CAPITAL_STRUCTURE_ANALYSIS:
-//			// CapitalStructureAnalysisService capitalStructureAnalysisService =
-//			// new CapitalStructureAnalysisServiceImpl();
-//			// capitalStructureAnalysisService.init(year, season, reports);
-//			// report.addData("負債比",
-//			// capitalStructureAnalysisService.computeDebtRatio());
-//			// report.addData("負債淨值比",
-//			// capitalStructureAnalysisService.computeDebtEquityRatio());
-//			// report.addData("長期資金佔固定資產比", capitalStructureAnalysisService
-//			// .computeLongTermFundsToFixedAssets());
-//			break;
-//		case OPERATING_PERFORMANCE_ANALYSIS:
-//			OperatingPerformanceAnalysisService operatingPerformanceAnalysisService = new OperatingPerformanceAnalysisServiceImpl();
-//			operatingPerformanceAnalysisService.init(year, season, reports);
-//			report.addData("應收帳款周轉率", operatingPerformanceAnalysisService
-//					.computeAccountsReceivableTurnoverRatio());
-//			report.addData("平均收現日數", operatingPerformanceAnalysisService
-//					.computeAccountsReceivableTurnoverDays());
-//			report.addData("存貨周轉率", operatingPerformanceAnalysisService
-//					.computeInventoryTurnoverRatio());
-//			report.addData("平均銷貨日數", operatingPerformanceAnalysisService
-//					.computeInventoryTurnoverDays());
-//			report.addData("固定資產周轉率", operatingPerformanceAnalysisService
-//					.computeFixedAssetTurnoverRatio());
-//			report.addData("總資產周轉率", operatingPerformanceAnalysisService
-//					.computeTotalAssetTurnoverRatio());
-//			break;
-//		case CASH_FLOW:
-//			CashFlowService cashFlowService = new CashFlowServiceImpl();
-//			cashFlowService.init(year, season, reports);
-//			report.addData("現金流量比率", cashFlowService.computeCashFlowRatio());
-//			report.addData("現金再投資比率",
-//					cashFlowService.computeCashReinvestmentRatio());
-//			// report.addData("現金流量允當比率",
-//			// cashFlowService.computeCashFlowAdequacyRatio());
-//			break;
-//		// case LEVERAGE:
-//		// LeverageService leverageService = new LeverageServiceImpl();
-//		// leverageService.init(year, season, reports);
-//		// report.addData("財務槓桿度", leverageService.computeFiancialLeverage());
-//		// report.addData("營運槓桿度", leverageService.computeOperatingLeverage());
-//		// break;
-//		default:
-//			throw new RuntimeException("unsupport report type:" + reportType);
-//		}
-//		return report;
-//	}
+	// public static DayOfReport compute(String stockId, int year, int season,
+	// ReportType reportType, DayOfReport... reports) {
+	// DayOfReport report = new DayOfReport();
+	// report.setYear(year);
+	// report.setSeason(season);
+	// report.setStockId(stockId);
+	// report.setReportType(reportType);
+	// switch (reportType) {
+	// case LIQUIDITY_ANALYSIS:
+	// LiquidityAnalysisService liquidityAnalysisService = new
+	// LiquidityAnalysisServiceImpl();
+	// liquidityAnalysisService.init(year, season, reports);
+	// report.addData("流動比",
+	// liquidityAnalysisService.computeCurrentRatio());
+	// report.addData("速動比", liquidityAnalysisService.computeQuickRatio());
+	// report.addData("利息保障倍數",
+	// liquidityAnalysisService.computeInterestGuarantee());
+	// break;
+	// case RETRUN_ON_INVESTMENT_ANALYSIS:
+	// RetrunOnInvestmentAnalysisService retrunOnInvestmentAnalysisService = new
+	// RetrunOnInvestmentAnalysisServiceImpl();
+	// retrunOnInvestmentAnalysisService.init(year, season, reports);
+	// report.addData("毛利率", retrunOnInvestmentAnalysisService
+	// .computeGrossProfitMargin());
+	// report.addData("營業利益率", retrunOnInvestmentAnalysisService
+	// .computeOperatingProfitMargin());
+	// report.addData("稅前淨利率", retrunOnInvestmentAnalysisService
+	// .computePreTaxNetProfitMargin());
+	// report.addData("稅後淨利率",
+	// retrunOnInvestmentAnalysisService.computeNetProfitMargin());
+	// report.addData("股東權益報酬率",
+	// retrunOnInvestmentAnalysisService.computeROE());
+	// report.addData("資產報酬率",
+	// retrunOnInvestmentAnalysisService.computeROA());
+	// break;
+	// case CAPITAL_STRUCTURE_ANALYSIS:
+	// // CapitalStructureAnalysisService capitalStructureAnalysisService =
+	// // new CapitalStructureAnalysisServiceImpl();
+	// // capitalStructureAnalysisService.init(year, season, reports);
+	// // report.addData("負債比",
+	// // capitalStructureAnalysisService.computeDebtRatio());
+	// // report.addData("負債淨值比",
+	// // capitalStructureAnalysisService.computeDebtEquityRatio());
+	// // report.addData("長期資金佔固定資產比", capitalStructureAnalysisService
+	// // .computeLongTermFundsToFixedAssets());
+	// break;
+	// case OPERATING_PERFORMANCE_ANALYSIS:
+	// OperatingPerformanceAnalysisService operatingPerformanceAnalysisService =
+	// new OperatingPerformanceAnalysisServiceImpl();
+	// operatingPerformanceAnalysisService.init(year, season, reports);
+	// report.addData("應收帳款周轉率", operatingPerformanceAnalysisService
+	// .computeAccountsReceivableTurnoverRatio());
+	// report.addData("平均收現日數", operatingPerformanceAnalysisService
+	// .computeAccountsReceivableTurnoverDays());
+	// report.addData("存貨周轉率", operatingPerformanceAnalysisService
+	// .computeInventoryTurnoverRatio());
+	// report.addData("平均銷貨日數", operatingPerformanceAnalysisService
+	// .computeInventoryTurnoverDays());
+	// report.addData("固定資產周轉率", operatingPerformanceAnalysisService
+	// .computeFixedAssetTurnoverRatio());
+	// report.addData("總資產周轉率", operatingPerformanceAnalysisService
+	// .computeTotalAssetTurnoverRatio());
+	// break;
+	// case CASH_FLOW:
+	// CashFlowService cashFlowService = new CashFlowServiceImpl();
+	// cashFlowService.init(year, season, reports);
+	// report.addData("現金流量比率", cashFlowService.computeCashFlowRatio());
+	// report.addData("現金再投資比率",
+	// cashFlowService.computeCashReinvestmentRatio());
+	// // report.addData("現金流量允當比率",
+	// // cashFlowService.computeCashFlowAdequacyRatio());
+	// break;
+	// // case LEVERAGE:
+	// // LeverageService leverageService = new LeverageServiceImpl();
+	// // leverageService.init(year, season, reports);
+	// // report.addData("財務槓桿度", leverageService.computeFiancialLeverage());
+	// // report.addData("營運槓桿度", leverageService.computeOperatingLeverage());
+	// // break;
+	// default:
+	// throw new RuntimeException("unsupport report type:" + reportType);
+	// }
+	// return report;
+	// }
 }

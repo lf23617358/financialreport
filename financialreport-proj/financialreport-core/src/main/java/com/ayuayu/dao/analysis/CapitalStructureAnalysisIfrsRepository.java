@@ -4,12 +4,12 @@
  */
 package com.ayuayu.dao.analysis;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ayuayu.model.analysis.CapitalStructureAnalysisIfrs;
 import com.ayuayu.model.analysis.CapitalStructureAnalysisIfrsKey;
 
 public interface CapitalStructureAnalysisIfrsRepository
 		extends
-		CrudRepository<CapitalStructureAnalysisIfrs, CapitalStructureAnalysisIfrsKey> {
+		JpaRepository<CapitalStructureAnalysisIfrs, CapitalStructureAnalysisIfrsKey> {
 }
