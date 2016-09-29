@@ -5,12 +5,13 @@ import java.util.List;
 
 import org.apache.commons.collections.IteratorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
 public class BaseServiceImpl<DOMAIN, ID extends Serializable> implements
 		BaseService<DOMAIN, ID> {
 	@Autowired
-	protected CrudRepository<DOMAIN, ID> repository;
+	protected JpaRepository<DOMAIN, ID> repository;
 
 	@Override
 	public DOMAIN findById(ID id) {

@@ -5,10 +5,12 @@
 package com.ayuayu.dao.statement;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 
 import com.ayuayu.model.statement.BalanceSheetIfrs;
 import com.ayuayu.model.statement.BalanceSheetIfrsKey;
 
 public interface BalanceSheetIfrsRepository extends
-		JpaRepository<BalanceSheetIfrs, BalanceSheetIfrsKey> {
+		JpaRepository<BalanceSheetIfrs, BalanceSheetIfrsKey>,
+		QueryDslPredicateExecutor<BalanceSheetIfrs> {
 }
